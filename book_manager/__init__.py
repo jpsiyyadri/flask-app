@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
+import json
 app = Flask(__name__)
+
 
 @app.route("/")
 def hello():
@@ -14,7 +16,9 @@ def welcome(name):
 def add():
     if(request.method == 'GET'):
         print("cool ",request.args.get('book_id'))
-        return "REQUEST FORM "+request.args.get('book_id', '')
+        if(request.args.get('book_id')):
+            return json.dumps({'data':[], 'status': 200})
+        return json.dumps({'data':[], 'status': 201})
     return render_template('404.html')
 
 # /delBook?book_id=

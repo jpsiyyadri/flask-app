@@ -7,11 +7,12 @@
     </style>
 {% endblock %}
 {% block content %}
-    <h1>LogIn Form</h1>
-    <p class="important">
-      Welcome to my awesome homepage.
-    </p>
-    <div>
+<div class="login-box border">
+        <button type="button btn-primary" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+    <h3>LogIn</h3>
+    
         <form action="/addBook" method="get">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
