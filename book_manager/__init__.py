@@ -2,8 +2,36 @@ from flask import Flask, request, render_template
 import json
 import markdown
 import os
+import pandas as pd
 app = Flask(__name__)
 
+def initialize_project():
+    folder = os.path.dirname(os.path.abspath(__file__))
+    print("folder ", folder, os.listdir(folder))
+    try:
+        if('database' not in os.listdir(folder)):
+            os.mkdir(folder+"/database")
+        # database = os.path.join(folder, "database")
+
+    
+        # database = os.path.join(folder, "database")
+    except FileExistsError:
+        # os.makedirs(os.path.join(folder, "database"))
+        print("file there")
+    finally:
+        database = os.path.join(folder, "database")
+
+    if('users.csv' not in os.listdir(database)):
+        users = [{'email':[], 'password': [], 'phone': []}]
+        pd.DataFrame(users).to_csv(os.path.join(database,"/users.csv"))
+    if('books.csv' not in os.listdir(database)):
+        books = [{'category': [],'book_name': [], 'author_name': [], 'isbn': [], 'price': []}]
+        pd.DataFrame(books).to_csv(os.path.join(database,"/books.csv"))  
+    if('user_book_delivery.csv' not in os.listdir(database)):
+        user_book_delivery = [{'isbn':[], 'email': [], 'phone':[], 'city': [], 'state': [], 'pincode': []}]
+        pd.DataFrame(user_book_delivery).to_csv(os.path.join(database,"/user_book_delivery.csv"))      
+
+    print("ccc ",os.listdir(database))
 
 @app.route("/api")
 def api():
@@ -19,7 +47,6 @@ def hello():
 @app.route("/signup", methods=['GET'])
 def signup():
     if(request.method == 'GET'):
-
         print("cool ",request.args.get('regemail'))
         if(1):
             return json.dumps({'data':[], 'status': 200})
@@ -32,8 +59,10 @@ def getBookCategories():
         json_dict = json.loads(json_file.read())[0]
         return json.dumps(json_dict)
     return "null"
+
 @app.route("/")
 def showBooks():
+    # initialize_project()
     return render_template('books.html')
 
 @app.route("/welcome/<name>")
